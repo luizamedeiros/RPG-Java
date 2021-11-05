@@ -1,7 +1,7 @@
 package fighter;
 
 public abstract class FighterFunction {
-	private String fighterFunctionName = "";
+	private String fighterFunctionName;
 	public Weapon weaponOne;
 	public Weapon weaponTwo;
 	public Weapon weaponThree;

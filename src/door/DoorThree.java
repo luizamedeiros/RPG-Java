@@ -14,6 +14,7 @@ public class DoorThree extends Door{
 			+ "Ele percebe sua chegada e se levanta com um salto, apanhando seu machado de guerra de\r\n"
 			+ "lâmina dupla."; 
 	private Player doorEnemy = new Player("O Capitão", null, null, enemies.getWeaponThree(), enemies);
+	private int doorNumber = 3;
 	
 	public DoorThree() {
 		System.out.println(getDoorStory());
@@ -24,5 +25,8 @@ public class DoorThree extends Door{
 	}
 	public Player getDoorEnemy() {
 		return doorEnemy;
+	}
+	public int getDoorNumber() {
+		return doorNumber;
 	}
 }

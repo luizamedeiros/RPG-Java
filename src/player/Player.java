@@ -13,7 +13,7 @@ public class Player {
 	private double life = 100.00;
 	private double armor;
 	private double attackPoints;
-	private FighterFunction fighterFunction;
+	private String fighterFunctionName;
 	
 	public Player(String name, Sex fighterSex, Motivation fighterMotivation, Weapon weapon, FighterFunction fighterFunction) {
 		this.name = name;
@@ -23,7 +23,7 @@ public class Player {
 		this.life = 100.00;
 		this.armor = 00.00;
 		this.attackPoints = 00.00;
-		this.fighterFunction = fighterFunction;
+		this.fighterFunctionName = fighterFunction.getfighterFunctionName();
 	}
 
 	public Player() {}
@@ -89,7 +89,7 @@ public class Player {
 		return damage;
 	}
 	
-	public FighterFunction getFighterFunction() {
-		return fighterFunction;
+	public String getFighterFunction() {
+		return fighterFunctionName;
 	}
 }

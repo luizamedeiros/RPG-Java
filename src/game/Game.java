@@ -6,7 +6,7 @@ public class Game {
 	
 	public static void main(String[] args) {
 		int latestDoorDecision;
-		boolean survivedLastestDoor;
+		boolean survivedLatestDoor;
 		int door =1;
 		
 		GameControls newGame = new GameControls();
@@ -19,26 +19,19 @@ public class Game {
 		FighterFunction a = newGame.functionChooser();
 		newGame.weaponChooser(a);
 		newGame.createUser();
-		newGame.fightOrFlight();
+		boolean stayed = newGame.fightOrFlight();
 		newGame.createGameEnemies();
 		latestDoorDecision = newGame.doorScene(door);
-		survivedLastestDoor = newGame.combatStart(latestDoorDecision);
-		if (survivedLastestDoor) { 
-			newGame.postCombatSequence(door);
-			newGame.postCombatTransition(door);
+		survivedLatestDoor = newGame.combatStart(latestDoorDecision);
+		while (survivedLatestDoor == true && door<3) { 
+			newGame.postCombatSequence();
+			newGame.postCombatTransition();
 			door += 1;
 			latestDoorDecision = newGame.doorScene(door);
-			survivedLastestDoor = newGame.combatStart(latestDoorDecision);
-			if (survivedLastestDoor == true) {
-			door += 1;
-			newGame.postCombatSequence(door);
-			newGame.postCombatTransition(door);
-			latestDoorDecision = newGame.finalDoor();
-			survivedLastestDoor = newGame.combatStart(latestDoorDecision);
-			}
+			survivedLatestDoor = newGame.combatStart(latestDoorDecision);
 		}
-			
+		if(survivedLatestDoor==true) {
+		newGame.victoryScene();	
 	}
-	
-	
+	}
 }

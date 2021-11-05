@@ -16,6 +16,14 @@ public class DoorOne extends Door{
 			+ "dos capitães do inimigo. Um orque horrendo, de armadura, capacete e espada em punho, em\r\n"
 			+ "posição de combate. Ele avança em sua direção.\r\n";
 	private Player doorEnemy = new Player("O Armeiro", null, null, enemies.getWeaponOne(), enemies);
+	private String postCombatStory = "Após derrotar o Armeiro, você percebe que seus equipamentos\n"
+			+ " estão muito danificados, e olha\r"
+			+ "em volta, encarando todas aquelas peças de armaduras resistentes e em ótimo estado. \r\n"
+			+ "Deseja pegar as armaduras?\r\n";
+	private int doorNumber = 1;
+	private String postCombatTransition = "Em uma mesa, você encontra uma chave dourada, e sabe que aquela chave abre uma das\r\n"
+			+ "fechaduras da porta do líder inimigo. Você pega a chave e guarda numa pequena bolsa que leva\r\n"
+			+ "presa ao cinto.";
 	
 	public DoorOne() {
 		System.out.println(getDoorStory());
@@ -26,5 +34,14 @@ public class DoorOne extends Door{
 	}
 	public Player getDoorEnemy() {
 		return doorEnemy;
+	}
+	public String getPostCombatStory() {
+		return postCombatStory;
+	}
+	public int getDoorNumber() {
+		return doorNumber;
+	}
+	public String getPostCombatTransition() {
+		return postCombatTransition;
 	}
 }

@@ -5,10 +5,11 @@ import player.Player;
 public abstract class Door {
 	private String doorStory;
 	private Player doorEnemy;
+	private String postCombatStory;
+	private int doorNumber;
+	private String postCombatTransition;
 	
 	public Door() {
-		this.doorEnemy = doorEnemy;
-		this.doorStory = doorStory;
 	}
 	
 	public String getDoorStory() {
@@ -16,5 +17,14 @@ public abstract class Door {
 	}
 	public Player getDoorEnemy() {
 		return doorEnemy;
+	}
+	public String getPostCombatStory() {
+		return postCombatStory;
+	}
+	public int getDoorNumber() {
+		return doorNumber;
+	}
+	public String getPostCombatTransition() {
+		return postCombatTransition;
 	}
 }

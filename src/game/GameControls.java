@@ -31,6 +31,7 @@ public class GameControls {
 	Player player;
 	EnemyFunction enemies;
 	Player currentEnemy;
+	Door currentDoor;
 	
 	Scanner input = new Scanner(System.in);
 	
@@ -92,9 +93,6 @@ public class GameControls {
 			case "2":
 				fighterSex = Sex.MAN;
 				break;
-			case "3":
-				fighterSex = Sex.NONBINARY;
-				break;
 			default: 
 				invalidOptionMessage();
 				genderChooser();
@@ -141,6 +139,7 @@ public class GameControls {
 			}
 		}
 	}
+	
 	public void fightOrFlight() {
 		System.out.println("\nInspirado pelo motivo que te trouxe até aqui, você sente seu coração ardendo em chamas, suas\r\n"
 				+ "mãos formigarem em volta da sua arma. Você a segura com firmeza. Seu foco está renovado. \r\n"
@@ -150,13 +149,15 @@ public class GameControls {
 				+ "frente, ou desistir");
 		System.out.println("1 - Ir a frente\n2 - Desistir");
 		int decision = input.nextInt();
-		if(decision == 1) {
+		switch(decision){
+		case 1:
 			fight();
-		}else if (decision == 2) {
+		case 2:
 			flight();
-		}else {
+		default:
 			invalidOptionMessage();
-		}
+			fightOrFlight();
+	}
 	}
 	
 	public void flight() {
@@ -180,6 +181,7 @@ public class GameControls {
 						+ "abre no teto atrás de você, no corredor. Flechas voam da escotilha em sua direção, e você salta\r\n"
 						+ "para dentro da sala, porém uma delas te acerta na perna");
 				player.setLife(player.getLife()-10);
+				System.out.println("Sua vida está em " + player.getLife() + ".");
 				break;
 			case 2:
 				System.out.println("Você respira fundo e desata a correr em direção à sala. Quando passa pela porta,\r\n"
@@ -268,60 +270,62 @@ public class GameControls {
 		int decision;
 		switch(door) {
 		case 1:
-			Door doorOne = new DoorOne();
-			currentEnemy = doorOne.getDoorEnemy();
+			currentDoor = new DoorOne();
+			currentEnemy = currentDoor.getDoorEnemy();
 			break;
 		case 2:
-			Door doorTwo = new DoorTwo();
-			currentEnemy = doorTwo.getDoorEnemy();
+			currentDoor = new DoorTwo();
+			currentEnemy = currentDoor.getDoorEnemy();
 			break;
 		case 3:
-			Door doorThree = new DoorThree();
-			currentEnemy = doorThree.getDoorEnemy();
+			Door currentDoor = new DoorThree();
+			currentEnemy = currentDoor.getDoorEnemy();
 			break;
 		}	
-		System.out.println("\n1 - Atacar!\n2 - Recuar!");
+		System.out.println("\n1 - Atacar!\n2 - Recuar!\n3 - Fugir!");
 		decision = input.nextInt();
-		return decision;
-	}
-	public int leftDoor() {
-		System.out.println("Você retorna à sala anterior e se dirige à porta da esquerda. Você se\r\n"
-				+ "aproxima, tentando ouvir o que acontece porta adentro, mas não escuta nada. Segura com mais\r\n"
-				+ "força sua arma com uma mão, enquanto empurra a porta com a outra. Ao entrar, você se depara\r\n"
-				+ "com uma sala parecida com a do arsenal, mas em vez de armaduras, existem vários potes e\r\n"
-				+ "garrafas de vidro com conteúdos misteriosos e de cores diversas, e você entende que o capitão\r\n"
-				+ "que vive ali, realiza experimentos com diversos ingredientes, criando poções utilizadas pelos\r\n"
-				+ "soldados para aterrorizar a região.\r\n"
-				+ "No fundo da sala, olhando em sua direção, está outro dos capitães do inimigo. Um orque\r\n"
-				+ "horrendo, de armadura, cajado em punho, em posição de combate. Ele avança em sua direção");
-		currentEnemy = new Player("O Alquimista", null, null, enemies.getWeaponTwo(), enemies);
-		System.out.println("\n1 - Atacar!\n2 - Recuar!");
-		int decision = input.nextInt();
 		return decision;
 	}
 	
 	public boolean combatStart(int decision) {
-		String survivor = null;
-		if(decision==1) {
-			survivor = combatSequence(player, currentEnemy);
-			System.out.println("survivor" + survivor);
+		boolean dead = false;
+		switch(decision) {
+		case 1:
+			combatSequence(player, currentEnemy);
+			break;
+		case 2:
+			combatSequence(currentEnemy, player);
+			break;
+		case 3: 
+			flight();
+			break;
 		}
-		else if(decision==2) {
-			survivor = combatSequence(currentEnemy, player);
-			System.out.println("survivor 2elseif" + survivor);
+		if(decision!=3) {
+			dead =checkDeath();
+			return dead;
 		}
-		
-		if (survivor=="Inimigo") {
-			System.out.println("survivor1if" + survivor);
+		return dead;
+	}
+	
+	public boolean checkDeath() {
+		if (player.getLife()<=0) {
+			System.out.println("Você não estava preparado para a força do inimigo");
+			if(player.getMotivation() == Motivation.VINGANCA) {
+				System.out.println("“Não foi possível concluir sua vingança, e\r\n"
+						+ "agora resta saber se alguém se vingará por você");
+			}
+			else {
+				deathScene();
+			}
 			return false;
 		}
 		else {
-			System.out.println("survivor" + survivor);
-			return true;
-		}
+			System.out.println("O inimigo não é páreo para o seu\r\n"
+					+ "heroísmo, e jaz imóvel aos seus pés.");
+			return true;}
 	}
 	
-	public String combatSequence(Player attacker, Player defender) {
+	public void combatSequence(Player attacker, Player defender) {
 		//variable for switching attacker and defender throughout combat sequence 
 		Player placeholderVariable;
 		while (attacker.getLife()>0 && defender.getLife() > 0) {
@@ -331,7 +335,6 @@ public class GameControls {
 			defender = placeholderVariable;
 		}
 		System.out.println(attacker.getName() + " morreu!");
-		return attacker.getFighterFunction().getfighterFunctionName();
 	}
 	
 	public void combatRound(Player attacker, Player defender) {
@@ -353,71 +356,32 @@ public class GameControls {
 			System.out.println(defender.getName() + " tem " + defender.getLife() + " de vida!\n");
 	}
 	
-	public void postCombatSequence(int door) {
-		switch(door) {
-		case 1:
-			System.out.println("Após derrotar o Armeiro, você percebe que seus equipamentos"
-					+ " estão muito danificados, e olha\r\n"
-					+ "em volta, encarando todas aquelas peças de armaduras resistentes e em ótimo estado. "
-					+ "Deseja pegar as armaduras?");
-			break;
-		case 2:
-			System.out.println("Após derrotar o Alquimista, você olha em volta, tentando reconhecer alguma poção do estoque\r\n"
-					+ "do inimigo. Em uma mesa, você reconhece uma pequena garrafa de vidro contendo um líquido\r\n"
-					+ "levemente rosado, pega a garrafa e pondera se deve beber um gole.\r\n"
-					+ "Deseja beber o líquido?");
-			break;
-		default:
-			invalidOptionMessage();
-		}
+	public void postCombatSequence() {
+		System.out.println(currentDoor.getPostCombatStory());
 		System.out.println("\n1 - Sim\n2 - Não");
 		int decision = input.nextInt();
-		if(decision==1 && door==1) {
+		if(decision==1 && currentDoor.getDoorNumber()==1) {
 			System.out.println("Você resolve usar os equipamentos do\r\n"
 					+ "inimigo contra ele, e trocar algumas peças suas, que estavam danificadas, pelas peças de\r\n"
 					+ "armaduras existentes na sala. De armadura nova, você se sente mais protegido para os desafios\r\n"
 					+ "à sua frente.");
 			player.setArmor(player.getArmor()+5);
 		}
-		else if(decision==2 && door==1) {
+		else if(decision==2 && currentDoor.getDoorNumber()==1) {
 			System.out.println("Você decide que não precisa utilizar\r\n"
 					+ "nada que venha das mãos do inimigo.");
 		}
-		else if(decision==1 && door==2){
+		else if(decision==1 && currentDoor.getDoorNumber()==2){
 			System.out.println("“Você se sente revigorado para seguir adiante!");
 			player.setLife(100.00);
 		}
-		else if(decision==2 && door == 2) {
+		else if(decision==2 && currentDoor.getDoorNumber()==2) {
 			System.out.println("Você fica receoso de beber algo produzido pelo inimigo");
 		}
 	}
-	public int finalDoor() {
-		System.out.println("De volta à sala das portas, você se dirige à porta final. Coloca as chaves nas fechaduras, e a\r\n"
-				+ "porta se abre. Seu coração acelera, memórias de toda a sua vida passam pela sua mente, e você\r\n"
-				+ "percebe que está muito próximo do seu objetivo final. Segura sua arma com mais firmeza, foca\r\n"
-				+ "no combate que você sabe que irá se seguir, e adentra a porta.\r\n"
-				+ "Lá dentro, você vê o líder sentado em uma poltrona dourada, com duas fogueiras de cada lado, e\r\n"
-				+ "prisioneiros acorrentados às paredes.\r\n"
-				+ "Ele percebe sua chegada e se levanta com um salto, apanhando seu machado de guerra de\r\n"
-				+ "lâmina dupla.\r\n");
-		currentEnemy = new Player("O Capitão", null, null, enemies.getWeaponThree(), enemies);
-		System.out.println("\n1 - Atacar!\n2 - Recuar!");
-		int decision = input.nextInt();
-		return decision;
-	}
 		
-	public void postCombatTransition(int door) {
-		switch(door) {
-		case 1:
-			System.out.println("Em uma mesa, você encontra uma chave dourada, e sabe que aquela chave abre uma das\r\n"
-					+ "fechaduras da porta do líder inimigo. Você pega a chave e guarda numa pequena bolsa que leva\r\n"
-					+ "presa ao cinto.");
-		case 2:
-			System.out.println("Ao lado da porta, você vê uma chave dourada em cima de uma mesa, e sabe que aquela chave\r\n"
-					+ "abre a outra fechadura da porta do líder inimigo. Você pega a chave e guarda na pequena bolsa\r\n"
-					+ "que leva presa ao cinto.\r\n"
-					+ "");
-		}
+	public void postCombatTransition() {
+		currentDoor.getPostCombatTransition();
 	}
 	
 	public void victoryScene() {
@@ -428,11 +392,22 @@ public class GameControls {
 					+ "pode seguir sua vida.\r\n");
 		}
 		else {
-			System.out.println("O êxtase em que você se encontra não cabe dentro de si. Você se ajoelha e grita de\r\n"
+			System.out.println("A êxtase em que você se encontra não cabe dentro de si. Você se ajoelha e grita de\r\n"
 					+ "alegria. A glória o aguarda, você a conquistou.\r\n");
 		}
 		System.out.println("Você se levanta, olha para os prisioneiros, vai de um em um e os liberta, e todos vocês saem em\r\n"
 				+ "direção à noite, retornando à cidade. Seu dever está cumprido.\r\n");
+	}
+
+	private void deathScene() {
+		if(player.getGender() == Sex.WOMAN) {
+			System.out.println("A glória que buscavas não será sua,\r\n"
+					+ "e a cidade aguarda por sua próxima heroína.");
+		}
+		else {
+			System.out.println("A glória que buscavas não será sua,\r\n"
+					+ "e a cidade aguarda por seu próximo herói.");					
+		}
 	}
 
 }
