@@ -37,6 +37,9 @@ public class DoorTwo extends Door{
 	public int getDoorNumber() {
 		return doorNumber;
 	}
+	public String getPostCombatStory() {
+		return postCombatStory;
+	}
 	public String getPostCombatTransition() {
 		return postCombatTransition;
 	}

@@ -19,19 +19,21 @@ public class Game {
 		FighterFunction a = newGame.functionChooser();
 		newGame.weaponChooser(a);
 		newGame.createUser();
-		boolean stayed = newGame.fightOrFlight();
-		newGame.createGameEnemies();
-		latestDoorDecision = newGame.doorScene(door);
-		survivedLatestDoor = newGame.combatStart(latestDoorDecision);
-		while (survivedLatestDoor == true && door<3) { 
-			newGame.postCombatSequence();
-			newGame.postCombatTransition();
-			door += 1;
+		int stayed = newGame.fightOrFlight();
+		if (stayed == 1) {
+			newGame.createGameEnemies();
 			latestDoorDecision = newGame.doorScene(door);
 			survivedLatestDoor = newGame.combatStart(latestDoorDecision);
+			while (survivedLatestDoor == true && door<3) { 
+				newGame.postCombatSequence();
+				newGame.postCombatTransition();
+				door += 1;
+				latestDoorDecision = newGame.doorScene(door);
+				survivedLatestDoor = newGame.combatStart(latestDoorDecision);
+			}
+			if(survivedLatestDoor==true) {
+			newGame.victoryScene();	
+			}
 		}
-		if(survivedLatestDoor==true) {
-		newGame.victoryScene();	
-	}
 	}
 }

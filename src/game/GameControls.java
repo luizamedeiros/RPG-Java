@@ -7,8 +7,6 @@ import door.DoorOne;
 import door.DoorThree;
 import door.DoorTwo;
 
-import java.util.Random;
-
 import fighter.Motivation;
 import fighter.Sex;
 import fighter.Weapon;
@@ -18,7 +16,6 @@ import fighter.EnemyFunction;
 import fighter.FighterFunction;
 import fighter.MageFunction;
 import fighter.MarksmanFunction;
-
 
 public class GameControls {
 	int gameLevel;
@@ -84,7 +81,7 @@ public class GameControls {
 		
 	public void genderChooser() {
 			System.out.println("Qual o sexo do seu personagem?\n"
-					+ "1 - Feminino\n" + "2 - Masculino\n" + "3 - Não binário\n");
+					+ "1 - Feminino\n" + "2 - Masculino\n");
 			String sexChecker = input.next();
 			switch (sexChecker) {
 			case "1":
@@ -140,7 +137,7 @@ public class GameControls {
 		}
 	}
 	
-	public void fightOrFlight() {
+	public int fightOrFlight() {
 		System.out.println("\nInspirado pelo motivo que te trouxe até aqui, você sente seu coração ardendo em chamas, suas\r\n"
 				+ "mãos formigarem em volta da sua arma. Você a segura com firmeza. Seu foco está renovado. \r\n"
 				+ "Você avança pelo portal.");
@@ -152,12 +149,15 @@ public class GameControls {
 		switch(decision){
 		case 1:
 			fight();
+			break;
 		case 2:
 			flight();
+			break;
 		default:
 			invalidOptionMessage();
 			fightOrFlight();
-	}
+		}
+		return decision;
 	}
 	
 	public void flight() {
@@ -301,7 +301,7 @@ public class GameControls {
 			break;
 		}
 		if(decision!=3) {
-			dead =checkDeath();
+			dead = checkDeath();
 			return dead;
 		}
 		return dead;
@@ -322,7 +322,8 @@ public class GameControls {
 		else {
 			System.out.println("O inimigo não é páreo para o seu\r\n"
 					+ "heroísmo, e jaz imóvel aos seus pés.");
-			return true;}
+			return true;
+			}
 	}
 	
 	public void combatSequence(Player attacker, Player defender) {
